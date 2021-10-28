@@ -70,6 +70,7 @@ function getBusEstimateTime() {
       console.log(('有在跑的公車'), workBus)
       console.log(('去程公車'), forthBus)
       console.log(('返程公車'), backBus)
+      // 
     })
     .catch(err => console.error('(取得預估到站資料失敗)', err))
 }
