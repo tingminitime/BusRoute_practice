@@ -117,7 +117,7 @@ function getBusRoute() {
     .then(res => {
       const stopOfRouteData = res.data
       console.log('往返站序的資料 stopOfRouteData(some)', stopOfRouteData)
-      const currentRouteData = stopOfRouteData.filter(item => item['RouteID'] === filterObj['filterBusName'])
+      const currentRouteData = stopOfRouteData.filter(item => item['RouteName']['Zh_tw'] === filterObj['filterBusName'])
       console.log('公車號碼搜尋完全符合RouteID的資料 currentRouteData(every)', currentRouteData)
 
       // 去程 Direction: 0 (stopOfRouteData 的 index 為偶數 0、2、4...)
