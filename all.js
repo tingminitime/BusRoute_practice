@@ -160,6 +160,8 @@ function getBusRoute() {
     .catch(err => console.error('(取得站序資料失敗)', err))
 }
 
+// (預備功能) 新增去程、新增倒數更新、手動更新、關鍵字選擇
+
 // ----- 監聽 -----
 citySelect.addEventListener('change', filterCitySelect, false)
 busSearch.addEventListener('blur', filterBusSearch, false)
