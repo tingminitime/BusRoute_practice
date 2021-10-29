@@ -93,6 +93,9 @@ img {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
   padding: 20px;
 }
 
@@ -176,6 +179,10 @@ img {
   padding: 5px 30px;
   border-radius: 4px 4px 0 0;
   cursor: pointer;
+  -webkit-box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0);
+          box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0);
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 .switch__btn:hover {
@@ -184,6 +191,8 @@ img {
   -webkit-transform-origin: left bottom;
           transform-origin: left bottom;
   margin-right: 12px;
+  -webkit-box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0.15);
+          box-shadow: 2px -2px 5px 5px rgba(0, 0, 0, 0.15);
 }
 
 .switch__btn.active {
@@ -194,4 +203,55 @@ img {
   -webkit-transform-origin: left bottom;
           transform-origin: left bottom;
   margin-right: 12px;
+}
+
+.routeList {
+  padding: 5px 0;
+}
+
+.routeList__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 10px 20px;
+}
+
+.routeList__mainInfo {
+  color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.routeList__timeLeft {
+  width: 90px;
+  padding: 10px;
+  margin-right: 10px;
+  text-align: center;
+  background-color: #ffc107;
+  color: #333;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+.routeList__stopInfo {
+  font-size: 18px;
+  letter-spacing: .05rem;
+}
+
+.routeList__busID {
+  font-size: 18px;
+  color: #fff;
 }

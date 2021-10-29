@@ -20,6 +20,7 @@
 .main
   display: flex
   justify-content: space-between
+  align-items: flex-start
   padding: 20px
 
 .filter
@@ -75,13 +76,45 @@
     padding: 5px 30px
     border-radius: 4px 4px 0 0
     cursor: pointer
+    box-shadow: 2px -2px 5px 5px rgba(0,0,0,0)
+    transition: .2s
     &:hover
       transform: scale(1.2)
       transform-origin: left bottom
       margin-right: 12px
+      box-shadow: 2px -2px 5px 5px rgba(0,0,0,.15)
     &.active
       background-color: #0d6efd
       color: #fff
       transform: scale(1.2)
       transform-origin: left bottom
       margin-right: 12px
+
+.routeList
+  padding: 5px 0
+  &__item
+    display: flex
+    justify-content: space-between
+    align-items: center
+    padding: 10px 20px
+  &__mainInfo
+    color: #fff
+    display: flex
+    justify-content: space-between
+    align-items: center
+  &__timeLeft
+    width: 90px
+    padding: 10px
+    margin-right: 10px
+    text-align: center
+    background-color: #ffc107
+    color: #333
+    font-weight: 500
+    border-radius: 20px
+  &__stopInfo
+    font-size: 18px
+    letter-spacing: .05rem
+
+  &__busID
+    font-size: 18px
+    color: #fff

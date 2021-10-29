@@ -25,12 +25,14 @@ const cityData = [
 ]
 let filterObj = {}
 let busData = []
-let goData = []
+let forthData = []
 let backData = []
+let filterCity = ''
 
 const citySelect = document.querySelector('.filter__select--city')
 const busSearch = document.querySelector('.filter__search')
 const searchConfirm = document.querySelector('.filter__confirm')
+const backRouteList = document.querySelector('.backRouteList')
 
 // 選擇地區加入 option
 function pushCityOption() {
@@ -65,14 +67,97 @@ function getBusEstimateTime() {
       const data = res.data
       // 篩選有在跑的公車
       const workBus = data.filter(item => item['PlateNumb'])
-      const forthBus = workBus.filter(item => item['Direction'])
-      const backBus = workBus.filter(item => !item['Direction'])
-      console.log(('有在跑的公車'), workBus)
-      console.log(('去程公車'), forthBus)
-      console.log(('返程公車'), backBus)
-      // 
+      // 篩選去程公車
+      const forthBus = workBus.filter(item => !item['Direction'])
+      // 篩選返程公車
+      const backBus = workBus.filter(item => item['Direction'])
+      console.log(('有在跑的公車(some)'), workBus)
+      console.log(('去程公車(some)'), forthBus)
+      console.log(('返程公車(some)'), backBus)
+      // 組出資料格式
+      backBus.forEach(item => {
+        // 比對 backBus 與 backData(原始空陣列) 有無一樣的 PlateNumb
+        const index = backData.map(item => item['plateNumb']).indexOf(item['PlateNumb'])
+
+        if (index === -1) { // 沒找到
+          backData.push({
+            plateNumb: item['PlateNumb'], // 車牌號碼
+            stops: [
+              {
+                estimateTime: item['EstimateTime'], // 預估到站時間(秒)
+                stopUID: item['StopUID'] // 站牌識別代碼
+              }
+            ]
+          })
+        } else { // 有找到
+          // 在同樣的 index 裡面的 stops 陣列 push 相同資料
+          backData[index]['stops'].push({
+            estimateTime: item['EstimateTime'], // 預估到站時間(秒)
+            stopUID: item['StopUID'] // 站牌識別代碼
+          })
+        }
+      })
+      console.log('backData(some)', backData)
+      getBusRoute()
     })
     .catch(err => console.error('(取得預估到站資料失敗)', err))
+}
+
+// Get 公車路線站序資料
+const forthList = document.querySelector('.routeList__forth')
+const backList = document.querySelector('.routeList__back')
+
+function getBusRoute() {
+  axios({
+    method: 'get',
+    url: `https://ptx.transportdata.tw/MOTC/v2/Bus/StopOfRoute/City/${filterObj['filterCity']}/${filterObj['filterBusName']}?$format=JSON
+    `,
+    headers: GetAuthorizationHeader()
+  })
+    .then(res => {
+      const stopOfRouteData = res.data
+      console.log('往返站序的資料 stopOfRouteData(some)', stopOfRouteData)
+      const currentRouteData = stopOfRouteData.filter(item => item['RouteID'] === filterObj['filterBusName'])
+      console.log('公車號碼搜尋完全符合RouteID的資料 currentRouteData(every)', currentRouteData)
+
+      // 去程 Direction: 0 (stopOfRouteData 的 index 為偶數 0、2、4...)
+
+      // 返程 Direction: 1 (stopOfRouteData 的 index 為奇數 1、3、5...)
+      let backStr = ''
+      let busID = ''
+      let time = 0
+      let timeText = ''
+
+      currentRouteData[1]['Stops'].forEach(item => {
+        backData.forEach(backItem => {
+          backItem['stops'].forEach(stop => {
+            if (stop['stopUID'] === item['StopUID']) {
+              // 公車車牌號碼
+              busID = backItem['plateNumb']
+              // 時間
+              time = Math.floor(stop['estimateTime'] / 60)
+              console.log(busID, time)
+              // 文字顯示
+              if (time === 0) timeText = '進站中'
+              else if (time <= 1 && time > 0) timeText = '即將進站'
+              else if (!time) timeText = '––'
+              else timeText = `${time} 分鐘`
+            }
+          })
+        })
+        backStr += `
+        <li class="routeList__item">
+          <div class="routeList__mainInfo">
+            <div class="routeList__timeLeft">${timeText}</div>
+            <div class="routeList__stopInfo">${item['StopUID']} / ${item['StopName']['Zh_tw']}</div>
+          </div>
+          <div class="routeList__busID">${busID}</div>
+        </li>
+        `
+      })
+      backRouteList.innerHTML = backStr
+    })
+    .catch(err => console.error('(取得站序資料失敗)', err))
 }
 
 // ----- 監聽 -----
