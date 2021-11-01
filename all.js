@@ -34,6 +34,16 @@ const busSearch = document.querySelector('.filter__search')
 const searchConfirm = document.querySelector('.filter__confirm')
 const backRouteList = document.querySelector('.backRouteList')
 
+// ----- API base -----
+const apiBusRequest = axios.create({
+  baseURL: 'https://ptx.transportdata.tw/MOTC/v2/Bus',
+  headers: GetAuthorizationHeader()
+})
+
+const apiEstimateTimeGet = () => apiBusRequest.get(`/EstimatedTimeOfArrival/City/${filterObj['filterCity']}/${filterObj['filterBusName']}?$format=JSON`)
+
+const apiStopRouteGet = () => apiBusRequest.get(`/StopOfRoute/City/${filterObj['filterCity']}/${filterObj['filterBusName']}?$format=JSON`)
+
 // 選擇地區加入 option
 function pushCityOption() {
   let option = '<option value="null">請選擇</option>'
@@ -57,11 +67,7 @@ function filterBusSearch(e) {
 
 // Get 公車預估到站資料
 function getBusEstimateTime() {
-  axios({
-    method: 'get',
-    url: `https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/${filterObj['filterCity']}/${filterObj['filterBusName']}?$format=JSON`,
-    headers: GetAuthorizationHeader()
-  })
+  apiEstimateTimeGet()
     .then(res => {
       console.log('(成功取得預估到站資料)', res.data)
       const data = res.data
@@ -108,12 +114,7 @@ const forthList = document.querySelector('.routeList__forth')
 const backList = document.querySelector('.routeList__back')
 
 function getBusRoute() {
-  axios({
-    method: 'get',
-    url: `https://ptx.transportdata.tw/MOTC/v2/Bus/StopOfRoute/City/${filterObj['filterCity']}/${filterObj['filterBusName']}?$format=JSON
-    `,
-    headers: GetAuthorizationHeader()
-  })
+  apiStopRouteGet()
     .then(res => {
       const stopOfRouteData = res.data
       console.log('往返站序的資料 stopOfRouteData(some)', stopOfRouteData)
@@ -166,7 +167,6 @@ function getBusRoute() {
 citySelect.addEventListener('change', filterCitySelect, false)
 busSearch.addEventListener('blur', filterBusSearch, false)
 searchConfirm.addEventListener('click', getBusEstimateTime, false)
-
 
 // API 驗證 (TDX 提供)
 function GetAuthorizationHeader() {
