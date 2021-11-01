@@ -46,16 +46,28 @@
       <div class="list">
         <ul class="switch">
           <li class="switch__item">
-            <button class="switch__btn">往</button>
+            <button
+              class="switch__btn switch__btn--forth"
+              data-direct="0"
+            >往</button>
           </li>
           <li class="switch__item">
-            <button class="switch__btn">返</button>
+            <button
+              class="switch__btn switch__btn--back"
+              data-direct="1"
+            >返</button>
           </li>
         </ul>
-        <ul class="routeList forthRouteList">
+        <ul
+          class="routeList forthRouteList"
+          data-direct="0"
+        >
           <!-- 載入資料 -->
         </ul>
-        <ul class="routeList backRouteList">
+        <ul
+          class="routeList backRouteList"
+          data-direct="1"
+        >
           <!-- 載入資料 -->
           <!-- <li class="routeList__item">
             <div class="routeList__mainInfo">

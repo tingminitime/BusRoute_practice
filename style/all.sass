@@ -91,6 +91,7 @@
       margin-right: 12px
 
 .routeList
+  display: none
   padding: 5px 0
   &__item
     display: flex
@@ -114,7 +115,8 @@
   &__stopInfo
     font-size: 18px
     letter-spacing: .05rem
-
   &__busID
     font-size: 18px
     color: #fff
+  &.active
+    display: block

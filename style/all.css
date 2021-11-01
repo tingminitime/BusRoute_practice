@@ -206,6 +206,7 @@ img {
 }
 
 .routeList {
+  display: none;
   padding: 5px 0;
 }
 
@@ -254,4 +255,8 @@ img {
 .routeList__busID {
   font-size: 18px;
   color: #fff;
+}
+
+.routeList.active {
+  display: block;
 }
