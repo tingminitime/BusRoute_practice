@@ -124,23 +124,28 @@ function switchDirectionBtn(e) {
 // Filter 公車預估到站資料
 function filterBusEstimateTime(data) {
   // 篩選有行駛的公車 ( PlateNumb 空值為該站沒有行駛 )
-  const workBus = data.filter(item => item['PlateNumb'])
+  // const workBus = data.filter(item => item['PlateNumb'])
+  // 篩選有行駛的公車，StopStatus 不為 0 則該站沒有行駛
+  // 0:'正常' 1:'尚未發車' 2:'交管不停靠' 3:'末班車已過' 4:'今日未營運'
+  // const workBus = data.filter(item => item['StopStatus'] === 0)
   // 篩選去程公車
-  const forthBus = workBus.filter(item => !item['Direction'])
+  const forthBus = data.filter(item => !item['Direction'])
   // 篩選返程公車
-  const backBus = workBus.filter(item => item['Direction'])
-  console.log(('有在跑的公車(some)'), workBus)
-  console.log(('去程公車(some)'), forthBus)
-  console.log(('返程公車(some)'), backBus)
+  const backBus = data.filter(item => item['Direction'])
+  // console.log(('有在跑的公車 workBus (some)'), workBus)
+  console.log(('去程公車 forthBus (some)'), forthBus)
+  console.log(('返程公車 backBus (some)'), backBus)
 
   // 組出 去程公車 資料格式
   forthBus.forEach(item => {
     // 比對 forthBus 與 forthData(原始空陣列) 有無一樣的 PlateNumb
-    const index = forthBus.map(item => item['plateNumb']).indexOf(item['PlateNumb'])
+    const index = forthData.map(item => item['plateNumb']).indexOf(item['PlateNumb'])
 
     if (index === -1) { // 沒找到
       forthData.push({
         plateNumb: item['PlateNumb'], // 車牌號碼
+        stopStatus: item['StopStatus'], // 車輛狀態
+        nextBusTime: item['NextBusTime'], // 下一班公車時間
         stops: [
           {
             estimateTime: item['EstimateTime'], // 預估到站時間(秒)
@@ -166,6 +171,8 @@ function filterBusEstimateTime(data) {
     if (index === -1) { // 沒找到
       backData.push({
         plateNumb: item['PlateNumb'], // 車牌號碼
+        stopStatus: item['StopStatus'], // 車輛狀態
+        nextBusTime: item['NextBusTime'], // 下一班公車時間
         stops: [
           {
             estimateTime: item['EstimateTime'], // 預估到站時間(秒)
